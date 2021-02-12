@@ -5,4 +5,3 @@ public class Trigger {
         return 1;
     }
 }
-
