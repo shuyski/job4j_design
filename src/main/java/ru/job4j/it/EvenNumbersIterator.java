@@ -17,7 +17,7 @@ public class EvenNumbersIterator implements Iterator {
 
     @Override
     public boolean hasNext() {
-        while (row != data.length){
+        while (row != data.length) {
             if (chet(data[row])) {
                 return true;
             }
@@ -32,7 +32,7 @@ public class EvenNumbersIterator implements Iterator {
             throw new NoSuchElementException();
         }
         int s;
-        while (row != data.length){
+        while (row != data.length) {
             if (chet(data[row])) {
                 s = data[row];
                 row++;
