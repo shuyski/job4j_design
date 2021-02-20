@@ -31,15 +31,6 @@ public class EvenNumbersIterator implements Iterator {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        int s;
-        while (row != data.length) {
-            if (chet(data[row])) {
-                s = data[row];
-                row++;
-                return s;
-            }
-            row++;
-        }
-        return -1;
+        return data[row++];
     }
 }
