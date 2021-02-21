@@ -26,8 +26,6 @@ public class MatrixIt implements Iterator<Integer> {
         if (!hasNext()) {
             throw new NoSuchElementException();
         }
-        var el = data[row][column];
-        column++;
-        return el;
+        return data[row][column++];
     }
 }
