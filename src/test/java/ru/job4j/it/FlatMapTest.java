@@ -11,6 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Тест FlatMap
+ */
 public class FlatMapTest {
     @Test
     public void whenDiffNext() {
