@@ -12,19 +12,13 @@ public class MatrixIt implements Iterator<Integer> {
         this.data = data;
     }
 
-    public boolean length(int sum) {
-        while (row < data.length && column >= data[row].length) {
-            column = 0;
-            row++;
-            sum++;
-        }
-        return sum != data.length;
-    }
-
     @Override
     public boolean hasNext() {
-        int sum = 0;
-        return length(sum);
+        while (data.length > row && column == data[row].length) {
+            column = 0;
+            row++;
+        }
+        return data.length > row && data[row].length > column;
     }
 
     @Override
