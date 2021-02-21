@@ -5,8 +5,8 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.w3c.dom.ls.LSOutput;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -58,7 +58,7 @@ public class FlatMapTest {
     @Test(expected = NoSuchElementException.class)
     public void whenEmpty() {
         Iterator<Iterator<Object>> data = List.of(
-                List.of().iterator()
+                Collections.emptyIterator()
         ).iterator();
         FlatMap<Object> flat = new FlatMap<>(data);
         flat.next();
@@ -66,13 +66,15 @@ public class FlatMapTest {
 
     @Test
     public void whenSeveralEmptyAndNotEmpty() {
-        Iterator<Iterator<?>> it = List.of(
-                List.of().iterator(),
-                List.of().iterator(),
-                List.of().iterator(),
+        Iterator<Iterator<Integer>> it = List.of(
+                Collections.<Integer>emptyIterator(),
+                Collections.<Integer>emptyIterator(),
+                Collections.<Integer>emptyIterator(),
+                Collections.<Integer>emptyIterator(),
                 List.of(1).iterator()
         ).iterator();
-        assertTrue(it.hasNext());
-        assertThat(it.next(), is(1));
+        FlatMap<?> flat = new FlatMap<>(it);
+        assertTrue(flat.hasNext());
+        assertThat(flat.next(), is(1));
     }
 }
