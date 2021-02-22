@@ -7,14 +7,10 @@ import java.util.Objects;
 public class SimpleArray<T> implements Iterable<T> {
 
     private Object[] array =  new Object[100];
-    private int row = 0;
     private int size = 0;
 
     public void add(T model) {
-        if (iterator().hasNext()) {
-            array[size] = model;
-            size++;
-        }
+            array[size++] = model;
     }
 
     public void set(int index, T model) {
@@ -24,8 +20,8 @@ public class SimpleArray<T> implements Iterable<T> {
 
     public void remove(int index) {
         Objects.checkIndex(index, size);
-        System.arraycopy(array, index + 1, array, index, size - index);
-        size--;
+        System.arraycopy(array, index + 1, array, index, size - index - 1);
+        array[size--] = null;
     }
 
     public T get(int index) {
@@ -35,11 +31,11 @@ public class SimpleArray<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-
         return new Iterator<>() {
+            private int row = 0;
             @Override
             public boolean hasNext() {
-                return row++ < size;
+                return row < size;
             }
 
             @Override
@@ -47,7 +43,7 @@ public class SimpleArray<T> implements Iterable<T> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return (T) array[row];
+                return (T) array[row++];
             }
         };
     }
