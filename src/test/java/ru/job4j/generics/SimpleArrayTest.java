@@ -11,7 +11,7 @@ public class SimpleArrayTest {
 
     @Test
     public void addString() {
-        SimpleArray<String> str = new SimpleArray();
+        SimpleArray<String> str = new SimpleArray<>();
         str.add("Cast");
         str.add("semi");
         str.add("Test");
@@ -30,7 +30,7 @@ public class SimpleArrayTest {
 
     @Test (expected = IndexOutOfBoundsException.class)
     public void remove() {
-        SimpleArray<Object> obj = new SimpleArray();
+        SimpleArray<Object> obj = new SimpleArray<>();
         obj.add("iPhone");
         obj.add(12);
         obj.add(27.8);
