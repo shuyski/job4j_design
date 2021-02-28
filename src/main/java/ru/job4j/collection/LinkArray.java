@@ -3,44 +3,35 @@ package ru.job4j.collection;
 import java.util.*;
 
 public class LinkArray<E> implements Iterable<E> {
-    private Node<E> last;
-   // private Node<E> first;
+    private Node<E> first;
     private int size = 0;
     private int modCount = 0;
-    private Object[] container;
 
     public void add(E value) {
-        Node<E> link = last;
-        Node<E> newNode = new Node<>(value, null, link);
-        last = newNode;
-//        if (link == null)
-//            first = newNode;
-//        else
-//            link = newNode;
-        if (size == 0) {
-            container = new Object[2];
-            container[size++] = newNode;
-            modCount++;
-            return;
-        }
-        container = Arrays.copyOf(container, container.length * 2);
-        container[size++] = newNode;
+        Node<E> link = first;
+        first = new Node<>(value, null, link);
+        first.next = link;
+        size++;
         modCount++;
     }
 
     public E get(int index) {
         Objects.checkIndex(index, size);
-        return (E) container[index];
+        Node<E> value = first;
+        for (int i = 0; i < index; i++) {
+            value = value.next;
+        }
+        return value.el;
     }
 
     @Override
     public Iterator<E> iterator() {
         return new Iterator<>() {
             private final int expectedModCount = modCount;
-            private int row = 0;
+            private Node<E> row = first;
             @Override
             public boolean hasNext() {
-                return row < size;
+                return row != null;
             }
 
             @Override
@@ -51,7 +42,9 @@ public class LinkArray<E> implements Iterable<E> {
                 if ((expectedModCount != modCount)) {
                     throw new ConcurrentModificationException();
                 }
-                return (E) container[row++];
+                Node<E> rsl = row;
+                row = row.next;
+                return (E) rsl;
             }
         };
     }

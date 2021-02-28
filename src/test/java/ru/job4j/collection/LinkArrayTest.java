@@ -16,8 +16,9 @@ public class LinkArrayTest {
         LinkArray<String> array = new LinkArray<>();
         array.add("first");
         array.add("second");
-        Object rsl = array.get(0);
-        assertThat(rsl.toString(), is("Node{el=first, next=null, prev=null}"));
+        array.add("third");
+        Object rsl = array.get(2);
+        assertThat(rsl, is("first"));
     }
 
     @Test
@@ -26,10 +27,8 @@ public class LinkArrayTest {
         array.add(1);
         array.add(2);
         array.add(3);
-        Object rsl = array.get(2);
-        assertThat(rsl.toString(), is("Node{el=3, next=null, "
-                + "prev=Node{el=2, next=null, "
-                + "prev=Node{el=1, next=null, prev=null}}}"));
+        Object rsl = array.get(1);
+        assertThat(rsl, is(2));
     }
 
     @Test
@@ -67,5 +66,4 @@ public class LinkArrayTest {
         array.add("second");
         it.next();
     }
-
 }
