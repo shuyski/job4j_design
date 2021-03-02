@@ -24,7 +24,7 @@ public class SimpleArray<T> implements Iterable<T> {
             container = new Object[1];
         }
         if (size == container.length) {
-            container = Arrays.copyOf(container, container.length + 1);
+            container = Arrays.copyOf(container, (container.length + 1) * 2);
         }
     }
 
