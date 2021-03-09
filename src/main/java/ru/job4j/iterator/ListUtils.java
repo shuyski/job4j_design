@@ -64,7 +64,7 @@ public class ListUtils {
         while (i.hasNext()) {
             var s = i.next();
             for (T element : elements) {
-                if (s == element) {
+                if (s.equals(element)) {
                     i.remove();
                     break;
                 }
