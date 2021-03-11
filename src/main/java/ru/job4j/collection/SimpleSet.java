@@ -8,7 +8,7 @@ public class SimpleSet<E> implements Iterable<E> {
 
     public boolean add(E e) {
         for (E value : set) {
-            if (value.equals(e)) {
+            if (Objects.equals(value, e)) {
                 return false;
             }
         }

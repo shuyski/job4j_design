@@ -44,4 +44,12 @@ public class SimpleSetTest {
         SimpleSet<String> s = new SimpleSet<>();
         s.iterator().next();
     }
+
+    @Test
+    public void whenNull() {
+        SimpleSet<Integer> s = new SimpleSet<>();
+        s.add(null);
+        assertThat(s.add(null), is(false));
+        assertThat(s.add(3), is(true));
+    }
 }
