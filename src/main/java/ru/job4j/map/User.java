@@ -24,6 +24,8 @@ public class User {
         map.put(user1, new Object());
         map.put(user2, new Object());
         System.out.println(map);
+        System.out.println(user1.hashCode());
+        System.out.println(user2.hashCode());
     }
 
     @Override
@@ -33,5 +35,10 @@ public class User {
                 + ", children=" + children
                 + ", birthday=" + birthday
                 + '}' + "\n";
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, children, birthday);
     }
 }
