@@ -43,13 +43,25 @@ public class HashMapArrayTest {
     }
 
     @Test
-    public void whenIteratorNext() {
+    public void whenIteratorNextFalse() {
         HashMapArray<String, Integer> map = new HashMapArray<>();
         map.insert("first", 1);
         map.insert("second", 2);
-        Iterator<HashMapArray.Map> iterator = map.iterator();
+        Iterator<String> iterator = map.iterator();
         iterator.next();
         iterator.next();
         assertThat(iterator.hasNext(), is(false));
+    }
+
+    @Test
+    public void whenIteratorNextTrue() {
+        HashMapArray<String, Integer> map = new HashMapArray<>();
+        map.insert("first", 1);
+        map.insert("second", 2);
+        map.insert("third", 15);
+        Iterator<String> iterator = map.iterator();
+        iterator.next();
+        iterator.next();
+        assertThat(iterator.hasNext(), is(true));
     }
 }

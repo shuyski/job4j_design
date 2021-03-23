@@ -2,7 +2,13 @@ package ru.job4j.map;
 
 import java.util.*;
 
-public class HashMapArray<K, V> implements Iterable<HashMapArray.Map>  {
+/**
+ * Class HashMapArray realize Map
+ *
+ * @author Ruslan Shuyski
+ * @version 2
+ */
+public class HashMapArray<K, V> implements Iterable<K>  {
     private Map<K, V>[] container;
     private int modCount = 0;
     private int capacity = 0;
@@ -19,33 +25,48 @@ public class HashMapArray<K, V> implements Iterable<HashMapArray.Map>  {
 
     public void extend() {
         if (capacity == 0) {
-            container = new Map[5];
+            container = new Map[4];
+            return;
         }
-        if (capacity == container.length) {
-            container = Arrays.copyOf(container, container.length * 2);
+        Map<K, V>[] maps = container;
+        container = new Map[container.length * 2];
+        capacity = 0;
+        for (Map<K, V> map : maps) {
+            if (map != null) {
+                container[capacity++] = new Map<>(map.key, map.value);
+            }
         }
     }
 
     public int find(K key) {
-        return container.length - 1 & key.hashCode();
+        return (container.length - 1) & key.hashCode();
     }
 
     public V get(K key) {
         int index = find(key);
-        return container[index].value;
+        for (Map<K, V> map : container) {
+            if (map.equals(container[index])) {
+                return container[index].value;
+            }
+        }
+        return null;
     }
 
     public boolean delete(K key) {
         int index = find(key);
         if (index < container.length && container[index] != null) {
-            container[index] = null;
-            return true;
+            for (Map<K, V> map : container) {
+                if (map.equals(container[index])) {
+                    container[index] = null;
+                    return true;
+                }
+            }
         }
         return false;
     }
 
     @Override
-    public Iterator<Map> iterator() {
+    public Iterator<K> iterator() {
         return new Iterator<>() {
             private final int expectedModCount = modCount;
             private int index = 0;
@@ -59,14 +80,14 @@ public class HashMapArray<K, V> implements Iterable<HashMapArray.Map>  {
             }
 
             @Override
-            public Map<K, V> next() {
+            public K next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
                 if ((expectedModCount != modCount)) {
                     throw new ConcurrentModificationException();
                 }
-                return container[index++];
+                return (K) container[index++];
             }
         };
     }
