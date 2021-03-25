@@ -6,16 +6,23 @@ import java.util.*;
  * Class HashMapArray realize Map
  *
  * @author Ruslan Shuyski
- * @version 2
+ * @version 3
  */
 public class HashMapArray<K, V> implements Iterable<K>  {
+    private static final double LOAD_FACTOR = 0.75;
     private Map<K, V>[] container;
     private int modCount = 0;
     private int capacity = 0;
 
     public boolean insert(K key, V value) {
-        extend();
-        if (container[find(key)] == null) {
+        if (capacity == 0) {
+            container = new Map[4];
+        }
+        if (capacity >= container.length * LOAD_FACTOR) {
+            extend();
+        }
+        int index = find(key);
+        if (container[index] == null) {
         container[capacity++] = new Map<>(key, value);
         modCount++;
         return true;
@@ -24,16 +31,12 @@ public class HashMapArray<K, V> implements Iterable<K>  {
     }
 
     public void extend() {
-        if (capacity == 0) {
-            container = new Map[4];
-            return;
-        }
         Map<K, V>[] maps = container;
         container = new Map[container.length * 2];
         capacity = 0;
         for (Map<K, V> map : maps) {
             if (map != null) {
-                container[capacity++] = new Map<>(map.key, map.value);
+                container[find(map.key)] = new Map<>(map.key, map.value);
             }
         }
     }
@@ -44,10 +47,11 @@ public class HashMapArray<K, V> implements Iterable<K>  {
 
     public V get(K key) {
         int index = find(key);
-        for (Map<K, V> map : container) {
-            if (map.equals(container[index])) {
-                return container[index].value;
-            }
+        if (container[index] == null || container.length - 1 < index) {
+            throw new NoSuchElementException();
+        }
+        if (key.equals(container[index].key)) {
+            return container[index].value;
         }
         return null;
     }
@@ -55,11 +59,9 @@ public class HashMapArray<K, V> implements Iterable<K>  {
     public boolean delete(K key) {
         int index = find(key);
         if (index < container.length && container[index] != null) {
-            for (Map<K, V> map : container) {
-                if (map.equals(container[index])) {
-                    container[index] = null;
-                    return true;
-                }
+            if (key.equals(container[index].key)) {
+                container[index] = null;
+                return true;
             }
         }
         return false;
@@ -76,7 +78,14 @@ public class HashMapArray<K, V> implements Iterable<K>  {
                 if (container == null || index > container.length - 1) {
                     return false;
                 }
-                return container[index] != null;
+                if (container[index] == null) {
+                    while (container[index] == null && index < container.length - 1) {
+                        if (container[++index] != null) {
+                            return true;
+                        }
+                    }
+                }
+                return index < container.length;
             }
 
             @Override

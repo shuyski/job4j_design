@@ -2,6 +2,7 @@ package ru.job4j.map;
 
 import org.junit.Test;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -63,5 +64,14 @@ public class HashMapArrayTest {
         iterator.next();
         iterator.next();
         assertThat(iterator.hasNext(), is(true));
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void whenNotElement() {
+        HashMapArray<String, Integer> map = new HashMapArray<>();
+        map.insert("first", 1);
+        map.insert("second", 2);
+        map.insert("third", 15);
+        map.get("Four");
     }
 }
