@@ -62,16 +62,34 @@ public class HashMapArrayTest {
         map.insert("third", 15);
         Iterator<String> iterator = map.iterator();
         iterator.next();
-        iterator.next();
+       // iterator.next();
         assertThat(iterator.hasNext(), is(true));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void whenNotElement() {
         HashMapArray<String, Integer> map = new HashMapArray<>();
         map.insert("first", 1);
         map.insert("second", 2);
         map.insert("third", 15);
-        map.get("Four");
+        assertNull(map.get("Four"));
+    }
+
+    @Test
+    public void whenExtend() {
+        HashMapArray<String, Integer> map = new HashMapArray<>();
+        map.insert("first", 1);
+        map.insert("second", 2);
+        map.insert("third", 15);
+        map.insert("four", 3);
+        map.insert("five", 5);
+        map.insert("six", 19);
+        Iterator<String> iterator = map.iterator();
+        iterator.next();
+        iterator.next();
+        iterator.next();
+//      iterator.next();
+//      iterator.next();
+        assertThat(iterator.hasNext(), is(true));
     }
 }
