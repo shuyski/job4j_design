@@ -6,7 +6,7 @@ import java.util.*;
  * Class HashMapArray realize Map
  *
  * @author Ruslan Shuyski
- * @version 4
+ * @version 5
  */
 public class HashMapArray<K, V> implements Iterable<K>  {
     private static final double LOAD_FACTOR = 0.75;
@@ -16,13 +16,13 @@ public class HashMapArray<K, V> implements Iterable<K>  {
 
     public boolean insert(K key, V value) {
         if (capacity == 0) {
-            container = new Map[4];
+            container = new Map[16];
         }
         if (capacity >= container.length * LOAD_FACTOR) {
             extend();
         }
         int index = find(key);
-//        System.out.println(index);
+        //System.out.println(index);
         if (container[index] == null) {
             container[index] = new Map<>(key, value);
             capacity++;
@@ -79,15 +79,11 @@ public class HashMapArray<K, V> implements Iterable<K>  {
 
             @Override
             public boolean hasNext() {
-                if (container == null || index > container.length - 1) {
+                if (container == null || index == container.length) {
                     return false;
                 }
-                if (container[index] == null) {
-                    while (container[index] == null && index < container.length - 1) {
-                        if (container[++index] != null) {
-                            return true;
-                        }
-                    }
+                while (index < container.length && container[index] == null) {
+                    index++;
                 }
                 return index < container.length;
             }
