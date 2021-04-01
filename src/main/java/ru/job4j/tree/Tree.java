@@ -8,7 +8,7 @@ import java.util.Queue;
  * Class Tree<E> realize TreeMap
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class Tree<E> implements SimpleTree<E> {
     private final Node<E> root;
@@ -19,9 +19,10 @@ public class Tree<E> implements SimpleTree<E> {
 
     @Override
     public boolean add(E parent, E child) {
-        if (findBy(parent).isPresent()) {
-            if (!findBy(child).isPresent()) {
-                findBy(parent).get().children.add(new Node<>(child));
+        Optional<Node<E>> p = findBy(parent);
+        if (p.isPresent()) {
+            if (findBy(child).isEmpty()) {
+                p.get().children.add(new Node<>(child));
                 return true;
             }
         }
