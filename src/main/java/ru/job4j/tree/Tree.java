@@ -1,14 +1,13 @@
 package ru.job4j.tree;
 
-import java.util.LinkedList;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Class Tree<E> realize TreeMap
  *
  * @author Ruslan Shuyski
- * @version 2
+ * @version 3
  */
 public class Tree<E> implements SimpleTree<E> {
     private final Node<E> root;
@@ -31,17 +30,25 @@ public class Tree<E> implements SimpleTree<E> {
 
     @Override
     public Optional<Node<E>> findBy(E value) {
-        Optional<Node<E>> rsl = Optional.empty();
+        Predicate<Node<E>> nodePredicate = t -> t.value.equals(value);
+        return findByPredicate(nodePredicate);
+    }
+
+    public boolean isBinary() {
+        Predicate<Node<E>> nodePredicate = t -> t.children.size() > 2;
+        return findByPredicate(nodePredicate).isEmpty();
+    }
+
+    private Optional<Node<E>> findByPredicate(Predicate<Node<E>> condition) {
         Queue<Node<E>> data = new LinkedList<>();
         data.offer(this.root);
         while (!data.isEmpty()) {
             Node<E> el = data.poll();
-            if (el.value.equals(value)) {
-                rsl = Optional.of(el);
-                break;
+            if (condition.test(el)) {
+                return Optional.of(el);
             }
             data.addAll(el.children);
         }
-        return rsl;
+        return Optional.empty();
     }
 }
