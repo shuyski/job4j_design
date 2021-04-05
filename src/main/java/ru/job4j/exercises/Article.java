@@ -4,7 +4,7 @@ package ru.job4j.exercises;
  * Class Article проверка текста на оригинальность
  *
  * @author Ruslan Shuyski
- * @version 3
+ * @version 1
  */
 public class Article {
     public static boolean generateBy(String origin, String line) {
