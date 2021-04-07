@@ -1,30 +1,20 @@
 package ru.job4j.exercises;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Class Article проверка текста на оригинальность
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class Article {
     public static boolean generateBy(String origin, String line) {
-        String[] str1 = origin.split(" "); // создаём массив строк из текстов
-        String[] str2 = line.split(" ");
-        int q = 0; // счётчик равенства
-        for (String s : str2) {
-            for (String s1 : str1) {
-                if ((s.equals(s1))
-                        || ((s + ".").equals(s1))
-                        || ((s + ",").equals(s1))
-                        || ((s + "!").equals(s1))) {
-                    // проверяем на равенство слова
-                    // с учётом знаков пунктуации
-                    q++; // если равны увеличиваем счётчик
-                    break;
-                }
-            }
-        }
-        return q == str2.length; // если счётчик равен длине массива
-        // второго текста, то истина
+        String[] str1 = origin.split("[ .!,]+");
+        String[] str2 = line.split("[ .!,]+");
+        Set<String> change = Arrays.stream(str1).collect(Collectors.toSet());
+        return change.containsAll(Arrays.asList(str2));
     }
 }
