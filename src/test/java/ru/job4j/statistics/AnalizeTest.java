@@ -13,8 +13,8 @@ public class AnalizeTest {
 
     private List<Analize.User> previous = new ArrayList<>();
     private final List<Analize.User> current = new ArrayList<>();
-    Analize analize = new Analize();
-    Analize.Info info;
+    private final Analize analize = new Analize();
+    private Analize.Info info;
 
     @Before
     public void setUp() {

@@ -6,25 +6,25 @@ import java.util.*;
  * Class Analize calculation of sheet change statistics
  *
  * @author Ruslan Shuyski
- * @version 2
+ * @version 3
  */
 public class Analize {
 
     public Info diff(List<User> previous, List<User> current) {
         Info info = new Info();
-        Map<Integer, String> map = new HashMap<>();
+        Map<Integer, User> map = new HashMap<>();
         for (User user : current) {
-            map.put(user.id, user.name);
+            map.put(user.getId(), user);
         }
         for (User user : previous) {
-            if (!map.containsKey(user.id)) {
+            if (!map.containsKey(user.getId())) {
                 info.deleted++;
             } else {
-                if (!map.get(user.id).equals(user.name)) {
+                if (!map.get(user.getId()).equals(user)) {
                     info.changed++;
                 }
             }
-            map.put(user.id, user.name);
+            map.put(user.getId(), user);
         }
         info.added = map.size() - previous.size();
         return info;
@@ -54,6 +54,14 @@ public class Analize {
         public User(int id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
         }
     }
 
