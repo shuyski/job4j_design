@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
  * и записывает её в файл
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class Matrix {
     public static int[][] multiple(int size) {
@@ -22,9 +22,9 @@ public class Matrix {
 
     public static void main(String[] args) {
         int[][] matrix = Matrix.multiple(5);
-        StringBuilder text = new StringBuilder(" ");
+        StringBuilder text = new StringBuilder("");
         for (int i = 0; i < matrix.length; i++) {
-            text = new StringBuilder(i > 0 ? text + "\n" : "");
+           text.append(i > 0 ? System.lineSeparator() : "");
             for (int j = 0; j < matrix.length; j++) {
                 text.append(matrix[i][j]).append(" ");
             }
