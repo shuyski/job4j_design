@@ -4,34 +4,29 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Class LogFilter читает файл
  *  и возвращает, где предпоследнее число - это 404
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class LogFilter {
 
     public static List<String> filter(String file) {
         List<String> list = new ArrayList<>();
-        StringBuilder text = new StringBuilder();
         try (BufferedReader in = new BufferedReader(new FileReader(file))) {
-            int read;
-            while ((read = in.read()) != -1) {
-                text.append((char) read);
-            }
+            list = in
+                    .lines()
+                    .filter(s ->
+                            s.contains("404 ")
+                                    && !s.contains("404 -")
+                                   )
+                    .collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        String[] lines = text.toString().split(System.lineSeparator());
-        for (String line : lines) {
-            String[] element = line.split(" ");
-            if (EvenNumberFile.isNumeric(element[element.length - 1])
-                    && Integer.parseInt(element[element.length - 2]) == 404) {
-                list.add(line);
-            }
         }
         return list;
     }
