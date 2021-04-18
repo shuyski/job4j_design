@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  *  и записывает результат в файл
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class LogFilter {
 
@@ -37,7 +37,7 @@ public class LogFilter {
                         new FileOutputStream(file)
                 ))) {
             for (String line : log) {
-                out.write(line + System.lineSeparator());
+                out.println(line);
             }
         } catch (Exception e) {
             e.printStackTrace();
