@@ -9,11 +9,12 @@ import java.util.StringJoiner;
 
 /**
  * Class Config читает файл
+ * конфигурации *.properties
  * с парами ключ=значение
  * и добавляет их в HashMap
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class Config {
     private final String path;
@@ -29,17 +30,25 @@ public class Config {
                 .lines()
                 .filter(t -> !t.isBlank()
                         && t.charAt(0) != '#')
-                .forEach(t -> values.put(t.substring(0, t.indexOf("=")),
-                        t.substring(t.indexOf("=") + 1)));
+                .forEach(t -> {
+                    int index = t.indexOf("=");
+                    String key = t.substring(0, index);
+                    values.put(key,
+                            t.substring(index + 1));
+                    check(key);
+                });
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    public void check(String key) {
+        if (!values.containsKey(key) || values.get(key).equals(" ")) {
+            throw new IllegalArgumentException("No value or key");
+        }
+    }
+
     public String value(String key) {
-            if (!values.containsKey(key) || values.get(key).equals(" ")) {
-                throw new IllegalArgumentException("No value or key");
-            }
         return values.get(key);
     }
 

@@ -17,25 +17,24 @@ public class ConfigTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void whenValueError() {
-        String path = "Config/app.check.txt";
+        String path = "Config/check.properties.txt";
         Config config = new Config(path);
         config.load();
-        config.value("ключ");
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void whenKeyError() {
-        String path = "Config/app.check.txt";
+        String path = "Config/check.properties.txt";
         Config config = new Config(path);
         config.load();
         config.value("15");
     }
 
-    @Test (expected = IllegalArgumentException.class)
-    public void whenNoComment() {
-        String path = "Config/app.log.txt";
+    @Test
+    public void whenValue() {
+        String path = "Config/log.properties.txt";
         Config config = new Config(path);
         config.load();
-        config.value("# Фамилии");
+        assertThat(config.value("Andrei"), is("Petrov"));
     }
 }
