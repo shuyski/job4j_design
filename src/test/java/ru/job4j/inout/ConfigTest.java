@@ -16,25 +16,23 @@ public class ConfigTest {
     }
 
     @Test (expected = IllegalArgumentException.class)
+    public void whenIndexError() {
+        String path = "Config/index.properties.txt";
+        Config config = new Config(path);
+        config.load();
+    }
+
+    @Test (expected = IllegalArgumentException.class)
     public void whenValueError() {
-        String path = "Config/check.properties.txt";
+        String path = "Config/value.properties.txt";
         Config config = new Config(path);
         config.load();
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void whenKeyError() {
-        String path = "Config/check.properties.txt";
+        String path = "Config/key.properties.txt";
         Config config = new Config(path);
         config.load();
-        config.value("15");
-    }
-
-    @Test
-    public void whenValue() {
-        String path = "Config/log.properties.txt";
-        Config config = new Config(path);
-        config.load();
-        assertThat(config.value("Andrei"), is("Petrov"));
     }
 }

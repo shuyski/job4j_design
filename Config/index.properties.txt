@@ -2,6 +2,6 @@
 ##and
 # Surname
 
-Andrei=Petrov
+Andrei Petrov
 Alexandr=Smirnov
 Ivan=Grishin

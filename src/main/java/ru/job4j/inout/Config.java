@@ -14,7 +14,7 @@ import java.util.StringJoiner;
  * и добавляет их в HashMap
  *
  * @author Ruslan Shuyski
- * @version 2
+ * @version 3
  */
 public class Config {
     private final String path;
@@ -25,26 +25,26 @@ public class Config {
     }
 
     public void load() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.path))) {
+        try (BufferedReader reader =
+                     new BufferedReader(new FileReader(this.path))) {
         reader
                 .lines()
                 .filter(t -> !t.isBlank()
                         && t.charAt(0) != '#')
                 .forEach(t -> {
                     int index = t.indexOf("=");
+                    if (index == -1) {
+                        throw new IllegalArgumentException();
+                    }
                     String key = t.substring(0, index);
-                    values.put(key,
-                            t.substring(index + 1));
-                    check(key);
+                    String value = t.substring(index + 1);
+                    if (key.isEmpty() || value.isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
+                    values.put(key, value);
                 });
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void check(String key) {
-        if (!values.containsKey(key) || values.get(key).equals(" ")) {
-            throw new IllegalArgumentException("No value or key");
         }
     }
 
@@ -55,7 +55,8 @@ public class Config {
     @Override
     public String toString() {
         StringJoiner out = new StringJoiner(System.lineSeparator());
-        try (BufferedReader read = new BufferedReader(new FileReader(this.path))) {
+        try (BufferedReader read =
+                     new BufferedReader(new FileReader(this.path))) {
             read.lines().forEach(out::add);
         } catch (Exception e) {
             e.printStackTrace();
