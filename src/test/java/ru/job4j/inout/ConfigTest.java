@@ -8,7 +8,7 @@ public class ConfigTest {
 
     @Test
     public void whenFileWithCommentAndSkippedLine() {
-        String path = "Config/app.properties.txt";
+        String path = "files/Config/app.properties";
         Config config = new Config(path);
         config.load();
         assertThat(config.value("hibernate.dialect"),
@@ -17,21 +17,21 @@ public class ConfigTest {
 
     @Test (expected = IllegalArgumentException.class)
     public void whenIndexError() {
-        String path = "Config/index.properties.txt";
+        String path = "files/Config/index.properties";
         Config config = new Config(path);
         config.load();
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void whenValueError() {
-        String path = "Config/value.properties.txt";
+        String path = "files/Config/value.properties";
         Config config = new Config(path);
         config.load();
     }
 
     @Test (expected = IllegalArgumentException.class)
     public void whenKeyError() {
-        String path = "Config/key.properties.txt";
+        String path = "files/Config/key.properties";
         Config config = new Config(path);
         config.load();
     }

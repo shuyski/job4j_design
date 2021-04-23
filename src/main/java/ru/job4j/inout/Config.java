@@ -65,6 +65,6 @@ public class Config {
     }
 
     public static void main(String[] args) {
-        System.out.println(new Config("Config/app.properties.txt"));
+        System.out.println(new Config("files/Config/app.properties"));
     }
 }
