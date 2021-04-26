@@ -35,18 +35,11 @@ public class AnalizyTest {
         File target = folder.newFile("target.csv");
         Analizy analizy = new Analizy();
         try (PrintWriter out = new PrintWriter(new PrintWriter(source))) {
-            out.println(new File("200 "
-                    + "10:56:01"
-                    + System.lineSeparator()
-                    + "500 "
-                    + "10:57:01"
-                    + System.lineSeparator()
-                    + "400 "
-                    + "10:58:01"
-                    + System.lineSeparator()
-                    + "200 "
-                    + "10:59:01"
-            ));
+            out.println("200 10:56:01");
+            out.println("500 10:57:01");
+            out.println("500 10:57:01");
+            out.println("400 10:58:01");
+            out.println("200 10:59:01");
         }
         analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         StringBuilder rsl = new StringBuilder();
@@ -55,7 +48,7 @@ public class AnalizyTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        assertThat(rsl.toString(), is("10:57:01" + ";" + "10:59:01" + ";"));
+        assertThat(rsl.toString(), is("10:57:01;10:59:01;"));
     }
 
     @Test
@@ -64,12 +57,8 @@ public class AnalizyTest {
         File target = folder.newFile("target.csv");
         Analizy analizy = new Analizy();
         try (PrintWriter out = new PrintWriter(new PrintWriter(source))) {
-            out.println(new File("200 "
-                    + "10:56:01"
-                    + System.lineSeparator()
-                    + "300 "
-                    + "10:57:01"
-            ));
+            out.println("200 10:56:01");
+            out.println("300 10:57:01");
         }
         analizy.unavailable(source.getAbsolutePath(), target.getAbsolutePath());
         StringBuilder rsl = new StringBuilder();
