@@ -22,6 +22,9 @@ public class ArgsName {
         for (String arg : args) {
             int one = arg.indexOf("-");
             int two = arg.indexOf("=");
+            if (one == -1 || two == -1) {
+                throw new IllegalArgumentException();
+            }
             String key = arg.substring(one + 1, two);
             String value = arg.substring(two + 1);
             if (key.isEmpty() || value.isEmpty()) {
