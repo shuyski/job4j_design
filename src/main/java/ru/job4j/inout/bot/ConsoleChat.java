@@ -2,10 +2,9 @@ package ru.job4j.inout.bot;
 
 import java.io.*;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ import java.util.Scanner;
  * с кодировкой windows-1251
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class ConsoleChat {
     private final String path;
@@ -34,45 +33,52 @@ public class ConsoleChat {
 
     public void run() throws IOException {
         Scanner input = new Scanner(System.in);
-        Path in = Paths.get(botAnswers);
+        List<String> inBot;
+        List<String> outText = new ArrayList<>();
+        Path in = Paths.get(this.botAnswers);
         if (!in.toFile().exists()) {
             throw new NoSuchFileException("No file 'botAnswers'");
         }
-        try (PrintWriter out = new PrintWriter(
-                new FileWriter(this.path, Charset.forName("Windows-1251")))) {
-            String i = "Begin";
-            System.out.println(i);
-            int length = (int) Files.lines(in).count();
-            while (!i.equals(OUT)) {
-                i = input.nextLine();
-                if (i.equals(STOP)) {
-                    out.println(i);
-                    while (!i.equals(CONTINUE)) {
-                        i = input.nextLine();
-                    }
-                }
-                switch (i) {
-                    case OUT:
-                        out.println(i);
-                        System.out.println("End");
-                        break;
-                    case CONTINUE:
-                        out.println(i);
-                        break;
-                    default:
-                        out.println(i);
-                        Random r = new Random();
-                        String bot = " ";
-                        while (bot.isBlank()) {
-                        bot = Files.readAllLines(in).get(r.nextInt(length));
-                        }
-                        System.out.println(bot);
-                        out.println(bot);
-                        break;
+        inBot = Files.readAllLines(in);
+        String i = "Begin";
+        System.out.println(i);
+        int length = (int) Files.lines(in).count();
+        while (!i.equals(OUT)) {
+            i = input.nextLine();
+            if (i.equals(STOP)) {
+                outText.add(i);
+                while (!i.equals(CONTINUE)) {
+                    i = input.nextLine();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            switch (i) {
+                case OUT:
+                    outText.add(i);
+                    System.out.println("End");
+                    try (PrintWriter out = new PrintWriter(
+                            new FileWriter(this.path,
+                                    Charset.forName("Windows-1251")))) {
+                        for (String line : outText) {
+                            out.println(line);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case CONTINUE:
+                    outText.add(i);
+                    break;
+                default:
+                    outText.add(i);
+                    Random r = new Random();
+                    String bot = " ";
+                    while (bot.isBlank()) {
+                        bot = inBot.get(r.nextInt(length));
+                    }
+                    System.out.println(bot);
+                    outText.add(bot);
+                    break;
+            }
         }
     }
 
