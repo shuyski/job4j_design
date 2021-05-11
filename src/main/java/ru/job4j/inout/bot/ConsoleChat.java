@@ -17,7 +17,7 @@ import java.util.Scanner;
  * с кодировкой windows-1251
  *
  * @author Ruslan Shuyski
- * @version 2
+ * @version 3
  */
 public class ConsoleChat {
     private final String path;
@@ -40,33 +40,23 @@ public class ConsoleChat {
             throw new NoSuchFileException("No file 'botAnswers'");
         }
         inBot = Files.readAllLines(in);
+        int length = inBot.size();
         String i = "Begin";
         System.out.println(i);
-        int length = (int) Files.lines(in).count();
         while (!i.equals(OUT)) {
             i = input.nextLine();
-            if (i.equals(STOP)) {
-                outText.add(i);
-                while (!i.equals(CONTINUE)) {
-                    i = input.nextLine();
-                }
-            }
             switch (i) {
+                case STOP:
+                    outText.add(i);
+                    while (!i.equals(CONTINUE)) {
+                        i = input.nextLine();
+                    }
+                    outText.add(i);
+                    break;
                 case OUT:
                     outText.add(i);
                     System.out.println("End");
-                    try (PrintWriter out = new PrintWriter(
-                            new FileWriter(this.path,
-                                    Charset.forName("Windows-1251")))) {
-                        for (String line : outText) {
-                            out.println(line);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    break;
-                case CONTINUE:
-                    outText.add(i);
+                    write(outText);
                     break;
                 default:
                     outText.add(i);
@@ -79,6 +69,18 @@ public class ConsoleChat {
                     outText.add(bot);
                     break;
             }
+        }
+    }
+
+    public void write(List<String> outText) {
+        try (PrintWriter out = new PrintWriter(
+                new FileWriter(this.path,
+                        Charset.forName("Windows-1251")))) {
+            for (String line : outText) {
+                out.println(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
