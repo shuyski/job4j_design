@@ -17,6 +17,7 @@ public class EchoServer {
                             str = in.readLine();
                             System.out.println(str);
                             if (str.contains("Bye")) {
+                                out.write("HTTP/1.1 200 OK\r\n".getBytes());
                                 server.close();
                             }
                         }
