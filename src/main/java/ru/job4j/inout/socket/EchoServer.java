@@ -13,6 +13,7 @@ import java.net.Socket;
  * @version 2
  */
 public class EchoServer {
+
     public static void main(String[] args) throws IOException {
         try (ServerSocket server = new ServerSocket(9000)) {
             while (!server.isClosed()) {
@@ -26,8 +27,7 @@ public class EchoServer {
                             str = in.readLine();
                             System.out.println(str);
                             if (str.contains("Exit")) {
-                                server.close();
-                                answer = "";
+                                answer = "Bye";
                             }
                             if (str.contains("Hello")) {
                                 answer = "Hello, dear friend.";
@@ -35,6 +35,9 @@ public class EchoServer {
                         }
                         out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
                         out.write(answer.getBytes());
+                        if (answer.equals("Bye")) {
+                            server.close();
+                        }
                     }
                 }
             }
