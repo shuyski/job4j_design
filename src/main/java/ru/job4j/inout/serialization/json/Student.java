@@ -43,4 +43,20 @@ public class Student {
                 new StudentFio("Petrov Ivan"),
                 new String[] {"Math", "English", "Physics"});
     }
+
+    public boolean isStudy() {
+        return study;
+    }
+
+    public int getKlass() {
+        return klass;
+    }
+
+    public StudentFio getName() {
+        return name;
+    }
+
+    public String[] getExam() {
+        return exam;
+    }
 }

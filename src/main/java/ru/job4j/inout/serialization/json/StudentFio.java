@@ -30,4 +30,8 @@ public class StudentFio {
                 + '\''
                 + '}';
     }
+
+    public String getName() {
+        return name;
+    }
 }
