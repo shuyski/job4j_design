@@ -1,0 +1,10 @@
+create table ip_device(
+	id serial primary key,
+	name varchar(255)
+);
+
+create table mac_id(
+	id serial primary key,
+	mac_name macaddr,
+	mac_id int references ip_device(id) unique
+);

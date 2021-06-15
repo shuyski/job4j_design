@@ -1,0 +1,10 @@
+create table painter(
+	id serial primary key,
+	name varchar(255)
+);
+
+create table picture(
+	id serial primary key,
+	name varchar(255),
+	picture_id int references painter(id)
+);
