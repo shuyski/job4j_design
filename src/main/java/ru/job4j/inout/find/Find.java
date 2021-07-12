@@ -3,9 +3,12 @@ package ru.job4j.inout.find;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class find.Find
@@ -13,7 +16,7 @@ import java.util.List;
  * файлов по критерию
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class Find {
 
@@ -21,18 +24,43 @@ public class Find {
         List<Path> rsl;
         switch (list.get("t")) {
             case "mask":
-                rsl = Searcher.search(dir, p -> p.toFile().getName().contains(list.get("n")));
+                String li = "";
+                String lis = "";
+                if (list.get("n").contains("*")) {
+                    li = list.get("n").replaceAll("\\*", ".+");
+                }
+                if (li.contains("?")) {
+                    lis = li.replaceAll("\\?", ".?");
+                }
+                Pattern pattern1 = Pattern.compile(lis);
+                rsl = regex(dir, pattern1);
                 break;
             case "name":
                 rsl = Searcher.search(dir, p -> p.toFile().getName().equals(list.get("n")));
                 break;
             case "regex":
-                rsl = Searcher.search(dir, p -> p.toFile().getName().matches(list.get("n")));
+                Pattern pattern = Pattern.compile(list.get("n"));
+                rsl = regex(dir, pattern);
                 break;
             default:
                 throw new IllegalArgumentException();
         }
         return rsl;
+    }
+
+    public static List<Path> regex(Path dir, Pattern regex) throws IOException {
+        List<Path> finalRsl = new ArrayList<>();
+        Files.walkFileTree(dir, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
+                Matcher matcher = regex.matcher(file.toFile().getName());
+                if (matcher.find()) {
+                    finalRsl.add(file.getFileName());
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return finalRsl;
     }
 
     public static void write(String file, List<Path> list) {

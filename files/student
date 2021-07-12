@@ -1,0 +1,15 @@
+create table student(
+	id serial primary key,
+	surname text,
+	age smallint,
+	sex char(1)
+);
+
+insert into student(surname, age, sex)
+      values('Petrov', 19, 'M');
+	  
+update student set surname = 'Ivanov';
+
+select * from student;
+
+delete from student;
