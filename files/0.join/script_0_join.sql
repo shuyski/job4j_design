@@ -47,4 +47,4 @@ create table teens(
 insert into gender(gender) values('M'), ('W');
 insert into teens(name, gender_id) values('Alex', 2), ('Max', 1), ('Ted', 1);
 
-select * from teens cross join gender;
+select n1.name as name_1, n2.name as name_2 from teens n1 cross join teens n2 where n1.gender_id<>n2.gender_id;
