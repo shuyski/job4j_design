@@ -18,20 +18,20 @@ import java.util.StringJoiner;
  * Выводим на экран результат
  *
  * @author Ruslan Shuyski
- * @version 1
+ * @version 2
  */
 public class TableEditor implements AutoCloseable {
 
     private Connection connection;
     private final Properties properties;
 
-    public TableEditor(Properties properties) {
+    public TableEditor(Properties properties) throws Exception {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() {
-        connection = null;
+    private void initConnection() throws Exception {
+        connection = getConnection();
     }
 
     public static Connection getConnection() throws Exception {
@@ -43,12 +43,10 @@ public class TableEditor implements AutoCloseable {
     }
 
     public void getStatement(String script) throws Exception {
-        try (Connection connection = getConnection()) {
             try (Statement statement = connection.createStatement()) {
                 statement.execute(script);
             }
         }
-    }
 
     public void createTable(String tableName) throws Exception {
                 String script = String.format(
