@@ -1,5 +1,6 @@
 package ru.job4j.jdbc.preparestatement;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.job4j.jdbc.TableEditor;
 
 import java.io.FileInputStream;
@@ -7,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.StringJoiner;
 
 /**
  * Class PrepareStatementDemo
@@ -17,9 +19,13 @@ import java.util.Properties;
  * @author Ruslan Shuyski
  * @version 1
  */
+
+@Slf4j
 public class PrepareStatementDemo {
 
     private Connection connection;
+
+   // static Logger log = LoggerFactory.getLogger("PrepareStatementDemo");
 
     public PrepareStatementDemo() throws Exception {
         initConnection();
@@ -129,6 +135,36 @@ public class PrepareStatementDemo {
                     + value.getName() + " "
                     + value.getPopulation());
         }
+        getTableScheme(demo.connection, properties.getProperty("nameTable"), list);
+        System.setProperty("log.name", "ancdes");
+        log.debug("start");
         table.dropTable(properties.getProperty("nameTable"));
+    }
+
+    public static void getTableScheme(Connection connection, String tableName, List<City> list) throws Exception {
+//        var rowSeparator = "-".repeat(30).concat(System.lineSeparator());
+//        var header = String.format("%-15s|%-15s%n", "NAME", "TYPE");
+//        var buffer = new StringJoiner(rowSeparator, rowSeparator, rowSeparator);
+//        buffer.add(header);
+        try (var statement = connection.createStatement()) {
+            var resultSet = statement.executeQuery(
+                    "select * from " + tableName
+            );
+            var metaData = resultSet.getMetaData();
+                while (resultSet.next()) {
+                    log.info("Id = {}, Name = {}, Population = {}",
+                    resultSet.getInt(1),
+                    resultSet.getString(2),
+                    resultSet.getInt(3));
+            }
+        }
+//            var metaData = selection.getMetaData();
+//            for (int i = 1; i <= metaData.getColumnCount(); i++) {
+//                buffer.add(String.format("%-15s|%-15s%n",
+//                        metaData.getColumnName(i), metaData.getColumnTypeName(i))
+//                );
+//            }
+//        }
+//        return buffer.toString();
     }
 }
